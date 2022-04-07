@@ -1019,7 +1019,11 @@ impl AsyncClient {
 
         // Message callback just queues incoming messages.
         self.set_message_callback(move |_, msg| {
-            tx.send(msg).unwrap();
+            let sr = tx.send(msg);
+            if sr.is_err() {
+                return;
+            }
+            //tx.send(msg).unwrap();
         });
 
         rx
